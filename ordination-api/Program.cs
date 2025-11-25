@@ -27,11 +27,16 @@ builder.Services.AddScoped<DataService>();
 var app = builder.Build();
 
 // Seed data hvis nødvendigt.
+// Seed data hvis nødvendigt.
 using (var scope = app.Services.CreateScope())
 {
+    var context = scope.ServiceProvider.GetRequiredService<OrdinationContext>();
+    context.Database.EnsureCreated();
+
     var dataService = scope.ServiceProvider.GetRequiredService<DataService>();
     dataService.SeedData();
 }
+
 
 app.UseHttpsRedirection();
 app.UseCors(AllowCors);
