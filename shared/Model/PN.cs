@@ -28,7 +28,6 @@ public class PN : Ordination {
 
 		    return false;
     }
-
     public override double doegnDosis() {
 	    double sum = 0; 
 	    if (dates.Count > 0)
