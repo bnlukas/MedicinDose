@@ -18,7 +18,15 @@ public class PN : Ordination {
     /// </summary>
     public bool givDosis(Dato givesDen)
     {
-	    return dates.Contains(givesDen); // mock 
+		    DateTime dosisDato = givesDen.dato.Date;
+
+		    if (dosisDato >= startDen && dosisDato < slutDen)
+		    {
+			    dates.Add(givesDen);
+			    return true;
+		    }
+
+		    return false;
     }
 
     public override double doegnDosis() {
