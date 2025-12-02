@@ -10,7 +10,7 @@ public class PatientTest
     public void PatientHasName()
     {
         string cpr = "160563-1234";
-        string navn = "John";
+        string navn = "Egon";
         double vægt = 83;
         
         Patient patient = new Patient(cpr, navn, vægt);
@@ -22,7 +22,7 @@ public class PatientTest
     public void TestDerAltidFejler()
     {
         string cpr = "160563-1234";
-        string navn = "John";
+        string navn = "Egon";
         double vægt = 83;
 
         Patient patient = new Patient(cpr, navn, vægt);

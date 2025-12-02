@@ -42,19 +42,24 @@ public class ServiceTest
     }
 
     [TestMethod]
-    [ExpectedException(typeof(ArgumentNullException))]
-    public void TestAtKodenSmiderEnException()
-    {
-        // Herunder skal man så kalde noget kode,
-        // der smider en exception.
+[ExpectedException(typeof(ArgumentException))]
+public void GetDoser_KasterExceptionVedNegativDosis()
+{
+    // Arrange
+    var ord = new DagligFast(DateTime.Now, DateTime.Now,
+        new Laegemiddel("Test", 1, 1, 1, "Stk"),
+        -1,  // Morgen dosis negativ → skal give exception
+        0,
+        0,
+        0);
 
-        // Hvis koden _ikke_ smider en exception,
-        // så fejler testen.
+    // Act
+    ord.getDoser(); // Denne skal smide exception
 
-        Console.WriteLine("Her kommer der ikke en exception. Testen fejler.");
-    }
+    // Hvis exception IKKE bliver kastet, fejler testen automatisk.
+}
 
-    // ==================== PN Tests ====================
+
 
     [TestMethod]
     public void PN_DoegnDosis_Beregnes_Korrekt()
@@ -152,7 +157,7 @@ public class ServiceTest
         // Assert - når implementeret, skal dette være summen af alle doser
         // Forventet: 2 + 3 + 1 = 6
         // Men nu returnerer den -1 fordi den ikke er implementeret
-        Assert.AreEqual(-1, doegnDosis);
+        Assert.AreEqual(6, doegnDosis);
     }
 
     [TestMethod]
@@ -175,6 +180,6 @@ public class ServiceTest
         // Døgndosis skulle være 1 + 2 = 3
         // Samlet dosis = 3 * 3 = 9
         // Men da doegnDosis returnerer -1, får vi -3
-        Assert.AreEqual(-3, samletDosis); // 3 dage * (-1) = -3
+        Assert.AreEqual(9, samletDosis); // 3 dage * (-1) = -3
     }
 }
