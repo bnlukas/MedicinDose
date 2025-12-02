@@ -23,18 +23,27 @@ public class DagligFast : Ordination {
 		return base.antalDage() * doegnDosis();
 	}
 
-public override double doegnDosis() 
-	{
-		return MorgenDosis.antal
-		     + MiddagDosis.antal
-		     + AftenDosis.antal
-		     + NatDosis.antal;
-	}
+public override double doegnDosis()
+{
+    return getDoser().Sum(d => d.antal);
+}
+	public Dosis[] getDoser()
+{
+    Dosis[] doser = 
+    { 
+        MorgenDosis, 
+        MiddagDosis, 
+        AftenDosis, 
+        NatDosis 
+    };
 
-	public Dosis[] getDoser() {
-		Dosis[] doser = {MorgenDosis, MiddagDosis, AftenDosis, NatDosis};
-		return doser;
-	}
+    // Check for negative values
+    if (doser.Any(d => d.antal < 0))
+        throw new ArgumentException("Dosis må ikke være negativ.");
+
+    return doser;
+}
+
 
 	public override String getType() {
 		return "DagligFast";
