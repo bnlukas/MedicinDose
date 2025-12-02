@@ -40,10 +40,13 @@ public class PN : Ordination {
 				    min = d.dato.Date; }
 			    if(d.dato.Date > max ) {
 				    max = d.dato.Date;}
-			    
+            
 		    }
-		    int dage = (max - min).Days +1;
-		    sum = samletDosis() / dage; }
+        
+		    int dage = (max - min).Days + 1;
+        
+		    sum = samletDosis() / dage; 
+	    }
 
 	    return sum; 
     }
