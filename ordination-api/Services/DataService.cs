@@ -216,9 +216,22 @@ public class DataService
     /// <param name="patient"></param>
     /// <param name="laegemiddel"></param>
     /// <returns></returns>
-	public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId) {
-        // TODO: Implement!
-        return -1;
-	}
+    public double GetAnbefaletDosisPerDøgn(int patientId, int laegemiddelId) {
+        Patient patient = db.Patienter.FirstOrDefault(p => p.PatientId == patientId)!;
+        Laegemiddel laegemiddel = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)!;
+    
+        double vaegt = patient.vaegt;
+        double faktor;
+    
+        if (vaegt < 25) {
+            faktor = laegemiddel.enhedPrKgPrDoegnLet;
+        } else if (vaegt <= 120) {
+            faktor = laegemiddel.enhedPrKgPrDoegnNormal;
+        } else {
+            faktor = laegemiddel.enhedPrKgPrDoegnTung;
+        }
+    
+        return vaegt * faktor;
+    }
     
 }
