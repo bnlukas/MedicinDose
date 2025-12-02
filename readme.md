@@ -1,8 +1,8 @@
-#
-## Benjamin(ItaBenja)
-## Emil (AwesomeBronomus)
-## Lukas(lukassloth)
-## Lukas (bnlukas)
+## Made by 
+ **Benjamin(ItaBenja)**
+ **Emil (AwesomeBronomus)**
+ **Lukas(lukassloth)**
+ **Lukas (bnlukas)**
 # Ordinationsprojektet
 
 Projektet indeholder en prototype på et ordinationssystem, der kan bruges til at ordinere medicin til borgere. 
