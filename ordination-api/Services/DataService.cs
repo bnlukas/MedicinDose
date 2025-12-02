@@ -131,82 +131,86 @@ public class DataService
     }
 
     public PN OpretPN(int patientId, int laegemiddelId, double antal, DateTime startDato, DateTime slutDato)
-{
-    var patient = db.Patienter.Include(p => p.ordinationer).FirstOrDefault(p => p.PatientId == patientId)
-        ?? throw new ArgumentException("Patient findes ikke");
+    {
+        var patient = db.Patienter.Include(p => 
+                          p.ordinationer)
+                          .FirstOrDefault(p => p.PatientId == patientId)
+            ?? throw new ArgumentException("Patient findes ikke");
 
-    var lm = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)
-        ?? throw new ArgumentException("Lægemiddel findes ikke");
+        var lm = db.Laegemiddler.FirstOrDefault(l => 
+                     l.LaegemiddelId == laegemiddelId)
+            ?? throw new ArgumentException("Lægemiddel findes ikke");
 
-    var pn = new PN(startDato, slutDato, antal, lm);
+        var pn = new PN(startDato, slutDato, antal, lm);
 
-    db.PNs.Add(pn);
-    patient.ordinationer.Add(pn);
+        db.PNs.Add(pn);
+        patient.ordinationer.Add(pn);
 
-    db.SaveChanges();
-    return pn;
-}
+        db.SaveChanges();
+        return pn;
+    }
 
+    public DagligFast OpretDagligFast(int patientId, int laegemiddelId,
+        double antalMorgen, double antalMiddag, double antalAften, double antalNat,
+        DateTime startDato, DateTime slutDato)
+    {
+        var patient = db.Patienter.Include(p => p.ordinationer)
+                          .FirstOrDefault(p => p.PatientId == patientId)
+            ?? throw new ArgumentException("Patient findes ikke");
 
-   public DagligFast OpretDagligFast(int patientId, int laegemiddelId,
-    double antalMorgen, double antalMiddag, double antalAften, double antalNat,
-    DateTime startDato, DateTime slutDato)
-{
-    var patient = db.Patienter.Include(p => p.ordinationer).FirstOrDefault(p => p.PatientId == patientId)
-        ?? throw new ArgumentException("Patient findes ikke");
+        var lm = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)
+            ?? throw new ArgumentException("Lægemiddel findes ikke");
 
-    var lm = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)
-        ?? throw new ArgumentException("Lægemiddel findes ikke");
-
-    var df = new DagligFast(startDato, slutDato, lm,
+        var df = new DagligFast(startDato, slutDato, lm,
         antalMorgen, antalMiddag, antalAften, antalNat);
 
-    db.DagligFaste.Add(df);
-    patient.ordinationer.Add(df);
+     db.DagligFaste.Add(df);
+        patient.ordinationer.Add(df);
 
-    db.SaveChanges();
-    return df;
-}
+        db.SaveChanges();
+        return df;
+    }
 
     public DagligSkæv OpretDagligSkaev(int patientId, int laegemiddelId, Dosis[] doser,
     DateTime startDato, DateTime slutDato)
-{
-    var patient = db.Patienter.Include(p => p.ordinationer).FirstOrDefault(p => p.PatientId == patientId)
-        ?? throw new ArgumentException("Patient findes ikke");
+    {
+        var patient = db.Patienter.Include(p => p.ordinationer)
+                          .FirstOrDefault(p => p.PatientId == patientId)
+            ?? throw new ArgumentException("Patient findes ikke");
 
-    var lm = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)
-        ?? throw new ArgumentException("Lægemiddel findes ikke");
+        var lm = db.Laegemiddler.FirstOrDefault(l => l.LaegemiddelId == laegemiddelId)
+            ?? throw new ArgumentException("Lægemiddel findes ikke");
 
-    var ds = new DagligSkæv(startDato, slutDato, lm);
-    ds.doser = doser.ToList();
+        var ds = new DagligSkæv(startDato, slutDato, lm);
+        ds.doser = doser.ToList();
 
-    db.DagligSkæve.Add(ds);
-    patient.ordinationer.Add(ds);
+        db.DagligSkæve.Add(ds);
+        patient.ordinationer.Add(ds);
 
-    db.SaveChanges();
-    return ds;
-}
+        db.SaveChanges();
+        return ds;
+    }
 
 
    public string AnvendOrdination(int id, Dato dato)
-{
-    var ord = db.Ordinationer
+    {
+        var ord = db.Ordinationer
         .Include(o => (o as PN).dates)
         .FirstOrDefault(o => o.OrdinationId == id);
 
-    if (ord == null)
-        return "Ordination findes ikke";
+        if (ord == null)
+            return "Ordination findes ikke";
 
-    if (ord is not PN pn)
-        return "Ordination er ikke af typen PN";
+        if (ord is not PN pn)
+            return "Ordination er ikke af typen PN";
 
-    if (dato.dato.Date < pn.startDen.Date || dato.dato.Date > pn.slutDen.Date)
-        return "Dato ligger udenfor ordinationens periode";
+        if (dato.dato.Date < pn.startDen.Date || dato.dato.Date > pn.slutDen.Date)
+            return "Dato ligger udenfor ordinationens periode";
 
-    pn.dates.Add(dato);
-    db.SaveChanges();
-    return "Dosis registreret";
-}
+        pn.dates.Add(dato);
+        db.SaveChanges();
+        return "Dosis registreret";
+    }
 
 
     /// <summary>
